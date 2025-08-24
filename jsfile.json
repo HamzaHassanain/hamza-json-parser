@@ -1,0 +1,27 @@
+{
+  "name": "John Doe",
+  "age": 30,
+  "is_student": false,
+  "array": [
+    {
+      "key1": "value1",
+      "key2": 100
+    },
+    "Element 1",
+    42,
+    true
+  ],
+
+  "key3": "value3",
+  "key4": 12345,
+
+  "INEST:": {
+    "key5": "value5",
+    "key6": 67890
+  },
+
+  "INEST2:": {
+    "key5": ["value5", { "key7": "value7", "key8": 89012 }, false],
+    "key6": 67890
+  }
+}

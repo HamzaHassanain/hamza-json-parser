@@ -1,11 +1,11 @@
 #pragma once
 
 #include <string>
-#include "JSON.hpp"
+#include "JSON_OBJECT.hpp"
 
 namespace hamza_json_parser
 {
-    class JSON_STRING : public JSON
+    class JSON_STRING : public JSON_OBJECT
     {
         std::string value;
 

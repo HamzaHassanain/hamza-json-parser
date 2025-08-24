@@ -48,7 +48,7 @@ include_directories(${CMAKE_SOURCE_DIR}/includes)
 # Check environment variable
 if( JSON_LOCAL_TEST AND JSON_LOCAL_TEST STREQUAL "1")
     message(STATUS "Building as executable (JSON_LOCAL_TEST=1)")
-    add_executable(json_parser ${SRC_FILES})
+    add_executable(json_parser app.cpp ${SRC_FILES})
 else()
     message(STATUS "Building as static library (JSON_LOCAL_TEST!=1)")
     add_library(json_parser STATIC ${SRC_FILES})
