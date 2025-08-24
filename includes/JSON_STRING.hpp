@@ -7,9 +7,9 @@ namespace hamza_json_parser
 {
     class JSON_STRING : public JSON_OBJECT
     {
-        std::string value;
 
     public:
+        std::string value;
         JSON_STRING() = default;
 
         JSON_STRING(const std::string &value) : value(value) {}
