@@ -14,7 +14,7 @@ namespace hamza_json_parser
         JSON_NUMBER(double value) : value(value) {}
         ~JSON_NUMBER() = default;
 
-        bool parse(const std::string &jsonString) override
+        bool set_json_data(const std::string &jsonString) override
         {
             try
             {

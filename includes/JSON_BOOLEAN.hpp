@@ -15,7 +15,7 @@ namespace hamza_json_parser
         JSON_BOOLEAN(bool value) : value(value) {}
         ~JSON_BOOLEAN() = default;
 
-        bool parse(const std::string &temp) override
+        bool set_json_data(const std::string &temp) override
         {
             auto jsonString = temp;
             std::transform(jsonString.begin(), jsonString.end(), jsonString.begin(), ::tolower);

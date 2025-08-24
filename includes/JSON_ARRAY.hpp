@@ -15,7 +15,7 @@ namespace hamza_json_parser
         JSON_ARRAY(const std::vector<std::shared_ptr<JSON_OBJECT>> &elements) : elements(elements) {}
         ~JSON_ARRAY() = default;
 
-        bool parse(const std::string &jsonString) override
+        bool set_json_data(const std::string &jsonString) override
         {
             throw std::runtime_error("Parsing JSON arrays is not implemented.");
         }

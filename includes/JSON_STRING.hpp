@@ -15,7 +15,7 @@ namespace hamza_json_parser
         JSON_STRING(const std::string &value) : value(value) {}
         ~JSON_STRING() = default;
 
-        bool parse(const std::string &jsonString) override
+        bool set_json_data(const std::string &jsonString) override
         {
             value = jsonString;
             return true;

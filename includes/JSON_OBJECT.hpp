@@ -11,9 +11,9 @@ namespace hamza_json_parser
 
     public:
         JSON_OBJECT();
-        ~JSON_OBJECT();
+        virtual ~JSON_OBJECT();
 
-        virtual bool parse(const std::string &jsonString);
+        virtual bool set_json_data(const std::string &jsonString);
         virtual void insert(const std::string &key, std::shared_ptr<JSON_OBJECT> value);
         virtual void erase(const std::string &key);
         virtual std::shared_ptr<JSON_OBJECT> get(const std::string &key) const;
@@ -21,6 +21,9 @@ namespace hamza_json_parser
         virtual void clear();
         std::shared_ptr<JSON_OBJECT> operator[](const std::string &key);
 
-    private:
+        const std::unordered_map<std::string, std::shared_ptr<JSON_OBJECT>> &get_data() const
+        {
+            return data;
+        }
     };
 }

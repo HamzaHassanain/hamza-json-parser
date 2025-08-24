@@ -1,15 +1,26 @@
 #include <JSON_OBJECT.hpp>
 #include <json_parser.hpp>
+#include <iostream>
 namespace hamza_json_parser
 {
 
     JSON_OBJECT::JSON_OBJECT() = default;
     JSON_OBJECT::~JSON_OBJECT() = default;
 
-    bool JSON_OBJECT::parse(const std::string &jsonString)
+    bool JSON_OBJECT::set_json_data(const std::string &jsonString)
     {
-        this->data.clear();
-        this->data = hamza_json_parser::parse(jsonString);
+        try
+        {
+
+            data.clear();
+            data = hamza_json_parser::parse(jsonString);
+            return true;
+        }
+        catch (const std::exception &e)
+        {
+            std::cerr << "Error parsing JSON data: " << e.what() << std::endl;
+            return false;
+        }
     }
 
     std::string JSON_OBJECT::stringify() const
