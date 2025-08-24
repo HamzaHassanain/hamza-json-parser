@@ -6,9 +6,9 @@ namespace hamza_json_parser
 {
     class JSON_NUMBER : public JSON_OBJECT
     {
-        double value;
 
     public:
+        double value;
         JSON_NUMBER() = default;
 
         JSON_NUMBER(double value) : value(value) {}

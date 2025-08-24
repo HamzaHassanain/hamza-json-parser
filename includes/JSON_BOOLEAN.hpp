@@ -7,9 +7,9 @@ namespace hamza_json_parser
 {
     class JSON_BOOLEAN : public JSON_OBJECT
     {
-        bool value;
 
     public:
+        bool value;
         JSON_BOOLEAN() = default;
 
         JSON_BOOLEAN(bool value) : value(value) {}

@@ -8,9 +8,9 @@ namespace hamza_json_parser
 {
     class JSON_ARRAY : public JSON_OBJECT
     {
-        std::vector<std::shared_ptr<JSON_OBJECT>> elements;
 
     public:
+        std::vector<std::shared_ptr<JSON_OBJECT>> elements;
         JSON_ARRAY() = default;
         JSON_ARRAY(const std::vector<std::shared_ptr<JSON_OBJECT>> &elements) : elements(elements) {}
         ~JSON_ARRAY() = default;
