@@ -6,8 +6,6 @@ A simple JSON parser written in C++.
 
 ## Table of Contents
 
-- [Overview](#overview)
-
 - [Prerequisites](#prerequisites)
 
   - [For Linux (Ubuntu/Debian)](#for-linux-ubuntudebian)
@@ -21,8 +19,6 @@ A simple JSON parser written in C++.
 - [API Documentation](#api-documentation)
 
 ## Prerequisites
-
-`
 
 - CMake 3.10 or higher
 - C++17 compatible compiler (GCC 7+, Clang 5+, MSVC 2017+)
@@ -209,7 +205,7 @@ For more details, please refer to the individual header files.
 // - Purpose: Small convenience factory and getter helpers for creating and extracting typed JSON objects.
 // - Features: Factory helpers (make_string/make_number/make_boolean) and getters that extract primitive values with runtime type checks.
 // - Namespaces and key functions:
-  namespace hh_json::meaker
+  namespace hh_json::maker
     std::shared_ptr<hh_json::JSON_OBJECT> make_string(const std::string &value);
     std::shared_ptr<hh_json::JSON_OBJECT> make_number(double value);
     std::shared_ptr<hh_json::JSON_OBJECT> make_boolean(bool value);

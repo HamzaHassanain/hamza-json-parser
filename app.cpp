@@ -14,9 +14,9 @@ int main()
     // Example 1: Build a JSON object manually and stringify it
     cout << "=== Example 1: Manual construction ===" << endl;
     auto obj = make_shared<JSON_OBJECT>();
-    obj->insert("name", meaker::make_string("Alice"));
-    obj->insert("age", meaker::make_number(30));
-    obj->insert("active", meaker::make_boolean(true));
+    obj->insert("name", maker::make_string("Alice"));
+    obj->insert("age", maker::make_number(30));
+    obj->insert("active", maker::make_boolean(true));
 
     cout << "Object: " << obj->stringify() << endl
          << endl;
@@ -24,11 +24,11 @@ int main()
     // Example 2: Build an array containing primitives and nested objects
     cout << "=== Example 2: Arrays and nesting ===" << endl;
     auto arr = make_shared<JSON_ARRAY>();
-    arr->insert(meaker::make_string("first"));
-    arr->insert(meaker::make_number(3.1415));
+    arr->insert(maker::make_string("first"));
+    arr->insert(maker::make_number(3.1415));
 
     auto nested = make_shared<JSON_OBJECT>();
-    nested->insert("k", meaker::make_string("v"));
+    nested->insert("k", maker::make_string("v"));
     arr->insert(nested);
 
     obj->insert("items", arr);

@@ -10,7 +10,7 @@
 #include "JSON_BOOLEAN.hpp"
 #include "JSON_ARRAY.hpp"
 
-namespace hh_json::meaker
+namespace hh_json::maker
 {
     std::shared_ptr<hh_json::JSON_OBJECT> make_string(const std::string &value)
     {
