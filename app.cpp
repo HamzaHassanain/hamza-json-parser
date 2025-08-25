@@ -1,75 +1,101 @@
-
-#include "json-lib.hpp"
+#include "json-parser.hpp"
 
 #include <iostream>
 #include <fstream>
 #include <memory>
+#include <vector>
+#include <string>
 using namespace std;
 
-using namespace hamza_json_parser;
+using namespace hh_json;
 
 int main()
 {
-    // // Test creating a JSON structure manually
-    // cout << "Creating JSON structure manually:" << endl;
-    // auto json_obj = make_shared<JSON_OBJECT>();
-    // json_obj->insert("name", make_shared<JSON_STRING>("John Doe"));
-    // json_obj->insert("age", make_shared<JSON_NUMBER>(30));
-    // json_obj->insert("is_student", make_shared<JSON_BOOLEAN>(false));
+    // Example 1: Build a JSON object manually and stringify it
+    cout << "=== Example 1: Manual construction ===" << endl;
+    auto obj = make_shared<JSON_OBJECT>();
+    obj->insert("name", meaker::make_string("Alice"));
+    obj->insert("age", meaker::make_number(30));
+    obj->insert("active", meaker::make_boolean(true));
 
-    // auto json_array = make_shared<JSON_ARRAY>();
-    // json_array->insert(make_shared<JSON_STRING>("Element 1"));
-    // json_array->insert(make_shared<JSON_NUMBER>(42));
-    // json_array->insert(make_shared<JSON_BOOLEAN>(true));
+    cout << "Object: " << obj->stringify() << endl
+         << endl;
 
-    // json_obj->insert("interests", json_array);
+    // Example 2: Build an array containing primitives and nested objects
+    cout << "=== Example 2: Arrays and nesting ===" << endl;
+    auto arr = make_shared<JSON_ARRAY>();
+    arr->insert(meaker::make_string("first"));
+    arr->insert(meaker::make_number(3.1415));
 
-    // cout << json_obj->stringify() << endl
-    //      << endl;
+    auto nested = make_shared<JSON_OBJECT>();
+    nested->insert("k", meaker::make_string("v"));
+    arr->insert(nested);
 
-    // // Test parsing a JSON string
-    // cout << "Parsing JSON string:" << endl;
-    // const string json_str = R"(
-    // {
-    //     "name": "Jane Smith",
-    //     "age": 28,
-    //     "is_employed": true,
-    //     "address": {
-    //         "street": "123 Main St",
-    //         "city": "Anytown",
-    //         "zip": 12345
-    //     },
-    //     "phone_numbers": [
-    //         "555-1234",
-    //         "555-5678"
-    //     ],
-    //     "skills": ["programming", "design", "communication"]
-    // }
-    // )";
+    obj->insert("items", arr);
+    cout << "Nested object: " << obj->stringify() << endl
+         << endl;
+
+    // Example 3: Parse a JSON string and read values using helpers
+    cout << "=== Example 3: Parsing JSON text ===" << endl;
+    const string json_text = R"({
+        "user": "Bob",
+        "scores": [10, 20, 30],
+        "admin": false,
+        "meta": { "region": "eu" }
+    })";
 
     try
     {
-        std::string jsfile;
-        std::ifstream ifs("jsfile.json");
-        if (ifs)
+        auto parsed = parse(json_text);
+
+        // Access top-level properties from the returned map
+        if (auto user_ptr = parsed["user"])
         {
-            jsfile.assign((std::istreambuf_iterator<char>(ifs)),
-                          (std::istreambuf_iterator<char>()));
+            cout << "user: " << getter::get_string(user_ptr) << endl;
         }
 
-        JSON_OBJECT root;
-        root.set_json_data(jsfile);
+        if (auto admin_ptr = parsed["admin"])
+        {
+            cout << "admin: " << (getter::get_boolean(admin_ptr) ? "true" : "false") << endl;
+        }
 
-        std::cout << root.stringify() << std::endl;
+        if (auto scores_ptr = parsed["scores"])
+        {
+            auto scores = getter::get_array(scores_ptr);
+            cout << "scores: [";
+            for (size_t i = 0; i < scores.size(); ++i)
+            {
+                // Each element is a JSON_OBJECT pointer that should be a number
+                cout << getter::get_number(scores[i]);
+                if (i + 1 < scores.size())
+                    cout << ", ";
+            }
+            cout << "]" << endl;
+        }
+
+        if (auto meta_ptr = parsed["meta"])
+        {
+            auto meta_obj = meta_ptr;
+            if (meta_obj)
+            {
+                if (auto region_ptr = meta_obj->get("region"))
+                {
+                    cout << "region: " << getter::get_string(region_ptr) << endl;
+                }
+            }
+        }
+
+        // Show full parsed structure by reassembling into a JSON_OBJECT and stringifying
+        auto root = make_shared<JSON_OBJECT>();
+        for (const auto &p : parsed)
+        {
+            root->insert(p.first, p.second);
+        }
+        cout << "full parsed: " << root->stringify() << endl;
     }
-    catch (const exception &e)
+    catch (const std::exception &e)
     {
-        cout << "Error parsing JSON: " << e.what() << endl;
-
-        // Let's print the processed JSON string for debugging
-        // string debug_json = json_str;
-
-        // cout << "Processed JSON string: " << debug_json << endl;
+        cerr << "Parse error: " << e.what() << endl;
     }
 
     return 0;

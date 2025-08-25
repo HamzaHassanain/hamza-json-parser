@@ -1,9 +1,11 @@
 #pragma once
 
 #include "JSON_OBJECT.hpp"
+
+#include <stdexcept>
 #include <algorithm>
 
-namespace hamza_json_parser
+namespace hh_json
 {
     class JSON_BOOLEAN : public JSON_OBJECT
     {
@@ -14,7 +16,10 @@ namespace hamza_json_parser
 
         JSON_BOOLEAN(bool value) : value(value) {}
         ~JSON_BOOLEAN() = default;
-
+        virtual std::shared_ptr<JSON_OBJECT> get([[maybe_unused]] const std::string &key) const
+        {
+            throw std::runtime_error("JSON_BOOLEAN does not contain objects");
+        }
         bool set_json_data(const std::string &temp) override
         {
             auto jsonString = temp;

@@ -12,7 +12,7 @@
 #include "../includes/JSON_NUMBER.hpp"
 #include "../includes/JSON_BOOLEAN.hpp"
 
-namespace hamza_json_parser
+namespace hh_json
 {
     void trim(std::string &str)
     {
@@ -179,8 +179,8 @@ namespace hamza_json_parser
     std::shared_ptr<JSON_NUMBER> parse_number(const std::string &str, size_t &pos)
     {
         size_t start = pos;
-        bool has_decimal = false;
-        bool has_exponent = false;
+        [[maybe_unused]] bool has_decimal = false;
+        [[maybe_unused]] bool has_exponent = false;
 
         // Handle negative sign
         if (pos < str.length() && str[pos] == '-')

@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <memory>
 #include "JSON_OBJECT.hpp"
-namespace hamza_json_parser
+namespace hh_json
 {
     class JSON_ARRAY : public JSON_OBJECT
     {
@@ -15,7 +15,18 @@ namespace hamza_json_parser
         JSON_ARRAY(const std::vector<std::shared_ptr<JSON_OBJECT>> &elements) : elements(elements) {}
         ~JSON_ARRAY() = default;
 
-        bool set_json_data(const std::string &jsonString) override
+        virtual std::shared_ptr<JSON_OBJECT> get([[maybe_unused]] const std::string &key) const
+        {
+            int idx = std::stoi(key);
+
+            if (idx < 0 || idx >= static_cast<int>(elements.size()))
+            {
+                throw std::out_of_range("Invalid array index");
+            }
+            return elements[idx];
+        }
+
+        bool set_json_data([[maybe_unused]] const std::string &jsonString) override
         {
             throw std::runtime_error("Parsing JSON arrays is not implemented.");
         }

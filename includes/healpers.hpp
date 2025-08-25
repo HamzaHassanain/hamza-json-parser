@@ -10,57 +10,57 @@
 #include "JSON_BOOLEAN.hpp"
 #include "JSON_ARRAY.hpp"
 
-namespace json_meaker
+namespace hh_json::meaker
 {
-    std::shared_ptr<hamza_json_parser::JSON_OBJECT> make_string(const std::string &value)
+    std::shared_ptr<hh_json::JSON_OBJECT> make_string(const std::string &value)
     {
-        return std::make_shared<hamza_json_parser::JSON_STRING>(value);
+        return std::make_shared<hh_json::JSON_STRING>(value);
     }
 
-    std::shared_ptr<hamza_json_parser::JSON_OBJECT> make_number(double value)
+    std::shared_ptr<hh_json::JSON_OBJECT> make_number(double value)
     {
-        return std::make_shared<hamza_json_parser::JSON_NUMBER>(value);
+        return std::make_shared<hh_json::JSON_NUMBER>(value);
     }
 
-    std::shared_ptr<hamza_json_parser::JSON_OBJECT> make_boolean(bool value)
+    std::shared_ptr<hh_json::JSON_OBJECT> make_boolean(bool value)
     {
-        return std::make_shared<hamza_json_parser::JSON_BOOLEAN>(value);
+        return std::make_shared<hh_json::JSON_BOOLEAN>(value);
     }
 
 }
 
-namespace json_getter
+namespace hh_json::getter
 {
-    bool get_boolean(const std::shared_ptr<hamza_json_parser::JSON_OBJECT> &obj)
+    bool get_boolean(const std::shared_ptr<hh_json::JSON_OBJECT> &obj)
     {
-        if (auto boolean = std::dynamic_pointer_cast<hamza_json_parser::JSON_BOOLEAN>(obj))
+        if (auto boolean = std::dynamic_pointer_cast<hh_json::JSON_BOOLEAN>(obj))
         {
             return boolean->value;
         }
         throw std::runtime_error("Not a boolean");
     }
 
-    double get_number(const std::shared_ptr<hamza_json_parser::JSON_OBJECT> &obj)
+    double get_number(const std::shared_ptr<hh_json::JSON_OBJECT> &obj)
     {
-        if (auto number = std::dynamic_pointer_cast<hamza_json_parser::JSON_NUMBER>(obj))
+        if (auto number = std::dynamic_pointer_cast<hh_json::JSON_NUMBER>(obj))
         {
             return number->value;
         }
         throw std::runtime_error("Not a number");
     }
 
-    std::string get_string(const std::shared_ptr<hamza_json_parser::JSON_OBJECT> &obj)
+    std::string get_string(const std::shared_ptr<hh_json::JSON_OBJECT> &obj)
     {
-        if (auto str = std::dynamic_pointer_cast<hamza_json_parser::JSON_STRING>(obj))
+        if (auto str = std::dynamic_pointer_cast<hh_json::JSON_STRING>(obj))
         {
             return str->value;
         }
         throw std::runtime_error("Not a string");
     }
 
-    std::vector<std::shared_ptr<hamza_json_parser::JSON_OBJECT>> get_array(const std::shared_ptr<hamza_json_parser::JSON_OBJECT> &obj)
+    std::vector<std::shared_ptr<hh_json::JSON_OBJECT>> get_array(const std::shared_ptr<hh_json::JSON_OBJECT> &obj)
     {
-        if (auto array = std::dynamic_pointer_cast<hamza_json_parser::JSON_ARRAY>(obj))
+        if (auto array = std::dynamic_pointer_cast<hh_json::JSON_ARRAY>(obj))
         {
             return array->elements;
         }

@@ -2,7 +2,7 @@
 
 #include "../includes/JSON_OBJECT.hpp"
 #include "../includes/parser.hpp"
-namespace hamza_json_parser
+namespace hh_json
 {
 
     JSON_OBJECT::JSON_OBJECT() = default;
@@ -14,7 +14,7 @@ namespace hamza_json_parser
         {
 
             data.clear();
-            data = hamza_json_parser::parse(jsonString);
+            data = hh_json::parse(jsonString);
             return true;
         }
         catch (const std::exception &e)
@@ -64,11 +64,6 @@ namespace hamza_json_parser
     void JSON_OBJECT::clear()
     {
         data.clear();
-    }
-
-    std::shared_ptr<JSON_OBJECT> JSON_OBJECT::operator[](const std::string &key)
-    {
-        return get(key);
     }
 
 }

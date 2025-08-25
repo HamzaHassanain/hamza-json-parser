@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include <memory>
 
-namespace hamza_json_parser
+namespace hh_json
 {
     class JSON_OBJECT;
 

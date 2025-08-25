@@ -3,7 +3,8 @@
 #include <string>
 #include <unordered_map>
 #include <memory>
-namespace hamza_json_parser
+#include <stdexcept>
+namespace hh_json
 {
     class JSON_OBJECT
     {
@@ -19,7 +20,6 @@ namespace hamza_json_parser
         virtual std::shared_ptr<JSON_OBJECT> get(const std::string &key) const;
         virtual std::string stringify() const;
         virtual void clear();
-        std::shared_ptr<JSON_OBJECT> operator[](const std::string &key);
 
         const std::unordered_map<std::string, std::shared_ptr<JSON_OBJECT>> &get_data() const
         {
