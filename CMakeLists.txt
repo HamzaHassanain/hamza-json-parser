@@ -42,8 +42,6 @@ endif()
 
 file(GLOB SRC_FILES src/*.cpp)
 
-# Include directories
-include_directories(${CMAKE_SOURCE_DIR}/includes)
 
 # Check environment variable
 if( JSON_LOCAL_TEST AND JSON_LOCAL_TEST STREQUAL "1")
