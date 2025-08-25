@@ -1,9 +1,6 @@
-#include <JSON_OBJECT.hpp>
-#include <JSON_STRING.hpp>
-#include <JSON_ARRAY.hpp>
-#include <JSON_NUMBER.hpp>
-#include <JSON_BOOLEAN.hpp>
-#include <json_parser.hpp>
+
+#include "json-lib.hpp"
+
 #include <iostream>
 #include <fstream>
 #include <memory>

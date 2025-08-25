@@ -1,15 +1,16 @@
-#include <json_parser.hpp>
 #include <algorithm>
 #include <vector>
 #include <iostream>
 #include <memory>
 #include <string>
 #include <unordered_map>
-#include "JSON_OBJECT.hpp"
-#include "JSON_ARRAY.hpp"
-#include "JSON_STRING.hpp"
-#include "JSON_NUMBER.hpp"
-#include "JSON_BOOLEAN.hpp"
+
+#include "../includes/parser.hpp"
+#include "../includes/JSON_OBJECT.hpp"
+#include "../includes/JSON_ARRAY.hpp"
+#include "../includes/JSON_STRING.hpp"
+#include "../includes/JSON_NUMBER.hpp"
+#include "../includes/JSON_BOOLEAN.hpp"
 
 namespace hamza_json_parser
 {

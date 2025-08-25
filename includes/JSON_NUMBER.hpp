@@ -16,15 +16,9 @@ namespace hamza_json_parser
 
         bool set_json_data(const std::string &jsonString) override
         {
-            try
-            {
-                value = std::stod(jsonString);
-                return true;
-            }
-            catch (const std::invalid_argument &)
-            {
-                return false;
-            }
+
+            value = std::stod(jsonString);
+            return true;
         }
         std::string stringify() const override
         {

@@ -12,19 +12,58 @@
 
 namespace json_meaker
 {
-    std::shared_ptr<hamza_json_parser::JSON_OBJECT> make_json_string(const std::string &value)
+    std::shared_ptr<hamza_json_parser::JSON_OBJECT> make_string(const std::string &value)
     {
         return std::make_shared<hamza_json_parser::JSON_STRING>(value);
     }
 
-    std::shared_ptr<hamza_json_parser::JSON_OBJECT> make_json_number(double value)
+    std::shared_ptr<hamza_json_parser::JSON_OBJECT> make_number(double value)
     {
         return std::make_shared<hamza_json_parser::JSON_NUMBER>(value);
     }
 
-    std::shared_ptr<hamza_json_parser::JSON_OBJECT> make_json_boolean(bool value)
+    std::shared_ptr<hamza_json_parser::JSON_OBJECT> make_boolean(bool value)
     {
         return std::make_shared<hamza_json_parser::JSON_BOOLEAN>(value);
     }
 
+}
+
+namespace json_getter
+{
+    bool get_boolean(const std::shared_ptr<hamza_json_parser::JSON_OBJECT> &obj)
+    {
+        if (auto boolean = std::dynamic_pointer_cast<hamza_json_parser::JSON_BOOLEAN>(obj))
+        {
+            return boolean->value;
+        }
+        throw std::runtime_error("Not a boolean");
+    }
+
+    double get_number(const std::shared_ptr<hamza_json_parser::JSON_OBJECT> &obj)
+    {
+        if (auto number = std::dynamic_pointer_cast<hamza_json_parser::JSON_NUMBER>(obj))
+        {
+            return number->value;
+        }
+        throw std::runtime_error("Not a number");
+    }
+
+    std::string get_string(const std::shared_ptr<hamza_json_parser::JSON_OBJECT> &obj)
+    {
+        if (auto str = std::dynamic_pointer_cast<hamza_json_parser::JSON_STRING>(obj))
+        {
+            return str->value;
+        }
+        throw std::runtime_error("Not a string");
+    }
+
+    std::vector<std::shared_ptr<hamza_json_parser::JSON_OBJECT>> get_array(const std::shared_ptr<hamza_json_parser::JSON_OBJECT> &obj)
+    {
+        if (auto array = std::dynamic_pointer_cast<hamza_json_parser::JSON_ARRAY>(obj))
+        {
+            return array->elements;
+        }
+        throw std::runtime_error("Not an array");
+    }
 }

@@ -1,6 +1,7 @@
-#include <JSON_OBJECT.hpp>
-#include <json_parser.hpp>
 #include <iostream>
+
+#include "../includes/JSON_OBJECT.hpp"
+#include "../includes/parser.hpp"
 namespace hamza_json_parser
 {
 
