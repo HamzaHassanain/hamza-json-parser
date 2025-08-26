@@ -37,61 +37,63 @@ int main()
 
     // Example 3: Parse a JSON string and read values using helpers
     cout << "=== Example 3: Parsing JSON text ===" << endl;
-    const string json_text = R"({
-        "user": "Bob",
-        "scores": [10, 20, 30],
-        "admin": false,
-        "meta": { "region": "eu" }
-    })";
+    string json_text;
+    string file = "jsfile.json";
+
+    ifstream ifs(file);
+    if (ifs)
+    {
+        json_text.assign((istreambuf_iterator<char>(ifs)), istreambuf_iterator<char>());
+    }
 
     try
     {
         auto parsed = parse(json_text);
-
-        // Access top-level properties from the returned map
-        if (auto user_ptr = parsed["user"])
+        for (const auto &[key, item] : parsed)
         {
-            cout << "user: " << getter::get_string(user_ptr) << endl;
+            // Access top-level properties from the returned map
+
+            cout << item->stringify() << endl;
         }
 
-        if (auto admin_ptr = parsed["admin"])
-        {
-            cout << "admin: " << (getter::get_boolean(admin_ptr) ? "true" : "false") << endl;
-        }
+        // if (auto admin_ptr = parsed["admin"])
+        // {
+        //     cout << "admin: " << (getter::get_boolean(admin_ptr) ? "true" : "false") << endl;
+        // }
 
-        if (auto scores_ptr = parsed["scores"])
-        {
-            auto scores = getter::get_array(scores_ptr);
-            cout << "scores: [";
-            for (size_t i = 0; i < scores.size(); ++i)
-            {
-                // Each element is a JSON_OBJECT pointer that should be a number
-                cout << getter::get_number(scores[i]);
-                if (i + 1 < scores.size())
-                    cout << ", ";
-            }
-            cout << "]" << endl;
-        }
+        // if (auto scores_ptr = parsed["scores"])
+        // {
+        //     auto scores = getter::get_array(scores_ptr);
+        //     cout << "scores: [";
+        //     for (size_t i = 0; i < scores.size(); ++i)
+        //     {
+        //         // Each element is a JSON_OBJECT pointer that should be a number
+        //         cout << getter::get_number(scores[i]);
+        //         if (i + 1 < scores.size())
+        //             cout << ", ";
+        //     }
+        //     cout << "]" << endl;
+        // }
 
-        if (auto meta_ptr = parsed["meta"])
-        {
-            auto meta_obj = meta_ptr;
-            if (meta_obj)
-            {
-                if (auto region_ptr = meta_obj->get("region"))
-                {
-                    cout << "region: " << getter::get_string(region_ptr) << endl;
-                }
-            }
-        }
+        // if (auto meta_ptr = parsed["meta"])
+        // {
+        //     auto meta_obj = meta_ptr;
+        //     if (meta_obj)
+        //     {
+        //         if (auto region_ptr = meta_obj->get("region"))
+        //         {
+        //             cout << "region: " << getter::get_string(region_ptr) << endl;
+        //         }
+        //     }
+        // }
 
-        // Show full parsed structure by reassembling into a JSON_OBJECT and stringifying
-        auto root = make_shared<JSON_OBJECT>();
-        for (const auto &p : parsed)
-        {
-            root->insert(p.first, p.second);
-        }
-        cout << "full parsed: " << root->stringify() << endl;
+        // // Show full parsed structure by reassembling into a JSON_OBJECT and stringifying
+        // auto root = make_shared<JSON_OBJECT>();
+        // for (const auto &p : parsed)
+        // {
+        //     root->insert(p.first, p.second);
+        // }
+        // cout << "full parsed: " << root->stringify() << endl;
     }
     catch (const std::exception &e)
     {

@@ -1,18 +1,5 @@
 {
-  "name": "John Doe",
-  "INEST:": { "key5": "value5", "key6": 67890.435435 },
-  "age": 30.0,
-  "is_student.x": false,
-  "arra.y": [
-    { "key1": "value1", "key2": 100.0 },
-    "Ele    me   nt 1",
-    42.0,
-    true
-  ],
-  "key3": "value3",
-  "key4": 12345.0,
-  "INEST2:": {
-    "key5": ["value5", { "key7": "value7", "key8": 89012.0 }, false],
-    "key6": 67890.87654654654654654656546546
-  }
+  "name": "<script>alert('XSS')</script>",
+  "description": "<img src=\"x\" onerror=\"alert('XSS')\">",
+  "price": 10.99
 }

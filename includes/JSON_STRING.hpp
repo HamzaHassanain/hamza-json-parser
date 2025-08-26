@@ -26,7 +26,15 @@ namespace hh_json
         }
         std::string stringify() const override
         {
-            return "\"" + value + "\"";
+            // if the value has any double quotes, escape them
+            std::string escaped = value;
+            size_t pos = 0;
+            while ((pos = escaped.find("\"", pos)) != std::string::npos)
+            {
+                escaped.insert(pos, "\\");
+                pos += 2;
+            }
+            return "\"" + escaped + "\"";
         }
 
     private:
