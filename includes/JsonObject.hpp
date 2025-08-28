@@ -12,6 +12,7 @@ namespace hh_json
 
     public:
         JsonObject();
+        JsonObject(const std::unordered_map<std::string, std::shared_ptr<JsonObject>> &initial_data) : data(initial_data) {}
         virtual ~JsonObject();
 
         virtual bool set_json_data(const std::string &jsonString);
@@ -27,5 +28,10 @@ namespace hh_json
         }
 
         std::shared_ptr<JsonObject> &operator[](const std::string &key);
+
+        bool has_key(const std::string &key) const
+        {
+            return data.find(key) != data.end();
+        }
     };
 }
