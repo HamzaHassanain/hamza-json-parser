@@ -34,6 +34,7 @@ namespace hh_json
                 escaped.insert(pos, "\\");
                 pos += 2;
             }
+
             return "\"" + escaped + "\"";
         }
 

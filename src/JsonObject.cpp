@@ -7,6 +7,7 @@ namespace hh_json
 
     JsonObject::JsonObject() = default;
     JsonObject::~JsonObject() = default;
+    JsonObject::JsonObject(const std::unordered_map<std::string, std::shared_ptr<JsonObject>> &initial_data) : data(initial_data) {}
 
     bool JsonObject::set_json_data(const std::string &jsonString)
     {
@@ -31,7 +32,12 @@ namespace hh_json
         // Add key-value pairs to the JSON object
         for (const auto &pair : data)
         {
-            result += "\"" + pair.first + "\": " + pair.second->stringify() + ",";
+            if (!pair.second)
+            {
+                result += "\"" + pair.first + "\": " + "{}" + ",";
+            }
+            else
+                result += "\"" + pair.first + "\": " + pair.second->stringify() + ",";
         }
         if (!data.empty())
         {
@@ -66,6 +72,11 @@ namespace hh_json
         data.clear();
     }
 
+    const std::unordered_map<std::string, std::shared_ptr<JsonObject>> &JsonObject::get_data() const
+    {
+        return data;
+    }
+
     std::shared_ptr<JsonObject> &JsonObject::operator[](const std::string &key)
     {
         if (data.find(key) == data.end())
@@ -73,6 +84,11 @@ namespace hh_json
             data[key] = std::make_shared<JsonObject>();
         }
         return data[key];
+    }
+
+    bool JsonObject::has_key(const std::string &key) const
+    {
+        return data.find(key) != data.end();
     }
 
 }
