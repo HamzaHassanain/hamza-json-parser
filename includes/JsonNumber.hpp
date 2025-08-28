@@ -1,22 +1,22 @@
 #pragma once
 
-#include "JSON_OBJECT.hpp"
+#include "JsonObject.hpp"
 
 namespace hh_json
 {
-    class JSON_NUMBER : public JSON_OBJECT
+    class JsonNumber : public JsonObject
     {
 
     public:
         double value;
-        JSON_NUMBER() = default;
+        JsonNumber() = default;
 
-        JSON_NUMBER(double value) : value(value) {}
-        ~JSON_NUMBER() = default;
+        JsonNumber(double value) : value(value) {}
+        ~JsonNumber() = default;
 
-        virtual std::shared_ptr<JSON_OBJECT> get([[maybe_unused]] const std::string &key) const
+        virtual std::shared_ptr<JsonObject> get([[maybe_unused]] const std::string &key) const
         {
-            throw std::runtime_error("JSON_NUMBER does not contain objects");
+            throw std::runtime_error("JsonNumber does not contain objects");
         }
 
         bool set_json_data(const std::string &jsonString) override

@@ -6,11 +6,11 @@
 #include <unordered_map>
 
 #include "../includes/parser.hpp"
-#include "../includes/JSON_OBJECT.hpp"
-#include "../includes/JSON_ARRAY.hpp"
-#include "../includes/JSON_STRING.hpp"
-#include "../includes/JSON_NUMBER.hpp"
-#include "../includes/JSON_BOOLEAN.hpp"
+#include "../includes/JsonObject.hpp"
+#include "../includes/JsonArray.hpp"
+#include "../includes/JsonString.hpp"
+#include "../includes/JsonNumber.hpp"
+#include "../includes/JsonBoolean.hpp"
 
 namespace hh_json
 {
@@ -83,13 +83,13 @@ namespace hh_json
     }
 
     // Forward declarations of parsing functions
-    std::shared_ptr<JSON_OBJECT> parse_value(const std::string &str, size_t &pos);
-    std::shared_ptr<JSON_OBJECT> parse_object(const std::string &str, size_t &pos);
-    std::shared_ptr<JSON_ARRAY> parse_array(const std::string &str, size_t &pos);
-    std::shared_ptr<JSON_STRING> parse_string(const std::string &str, size_t &pos);
-    std::shared_ptr<JSON_NUMBER> parse_number(const std::string &str, size_t &pos);
-    std::shared_ptr<JSON_BOOLEAN> parse_boolean(const std::string &str, size_t &pos);
-    std::shared_ptr<JSON_OBJECT> parse_null(const std::string &str, size_t &pos);
+    std::shared_ptr<JsonObject> parse_value(const std::string &str, size_t &pos);
+    std::shared_ptr<JsonObject> parse_object(const std::string &str, size_t &pos);
+    std::shared_ptr<JsonArray> parse_array(const std::string &str, size_t &pos);
+    std::shared_ptr<JsonString> parse_string(const std::string &str, size_t &pos);
+    std::shared_ptr<JsonNumber> parse_number(const std::string &str, size_t &pos);
+    std::shared_ptr<JsonBoolean> parse_boolean(const std::string &str, size_t &pos);
+    std::shared_ptr<JsonObject> parse_null(const std::string &str, size_t &pos);
 
     // Skip whitespace
     void skip_whitespace(const std::string &str, size_t &pos)
@@ -101,7 +101,7 @@ namespace hh_json
     }
 
     // Parse a JSON string value
-    std::shared_ptr<JSON_STRING> parse_string(const std::string &str, size_t &pos)
+    std::shared_ptr<JsonString> parse_string(const std::string &str, size_t &pos)
     {
         if (str[pos] != '\"')
         {
@@ -117,7 +117,7 @@ namespace hh_json
             if (c == '\"')
             {
                 // End of string
-                return std::make_shared<JSON_STRING>(value);
+                return std::make_shared<JsonString>(value);
             }
             else if (c == '\\' && pos < str.length())
             {
@@ -176,7 +176,7 @@ namespace hh_json
     }
 
     // Parse a JSON number
-    std::shared_ptr<JSON_NUMBER> parse_number(const std::string &str, size_t &pos)
+    std::shared_ptr<JsonNumber> parse_number(const std::string &str, size_t &pos)
     {
         size_t start = pos;
         [[maybe_unused]] bool has_decimal = false;
@@ -224,7 +224,7 @@ namespace hh_json
 
         // Extract the number string and convert to double
         std::string number_str = str.substr(start, pos - start);
-        auto result = std::make_shared<JSON_NUMBER>();
+        auto result = std::make_shared<JsonNumber>();
         if (!result->set_json_data(number_str))
         {
             throw std::runtime_error("Invalid number format at position " + std::to_string(start));
@@ -234,24 +234,24 @@ namespace hh_json
     }
 
     // Parse a JSON boolean value
-    std::shared_ptr<JSON_BOOLEAN> parse_boolean(const std::string &str, size_t &pos)
+    std::shared_ptr<JsonBoolean> parse_boolean(const std::string &str, size_t &pos)
     {
         if (pos + 4 <= str.length() && str.substr(pos, 4) == "true")
         {
             pos += 4;
-            return std::make_shared<JSON_BOOLEAN>(true);
+            return std::make_shared<JsonBoolean>(true);
         }
         else if (pos + 5 <= str.length() && str.substr(pos, 5) == "false")
         {
             pos += 5;
-            return std::make_shared<JSON_BOOLEAN>(false);
+            return std::make_shared<JsonBoolean>(false);
         }
 
         throw std::runtime_error("Expected 'true' or 'false' at position " + std::to_string(pos));
     }
 
     // Parse a JSON null value
-    std::shared_ptr<JSON_OBJECT> parse_null(const std::string &str, size_t &pos)
+    std::shared_ptr<JsonObject> parse_null(const std::string &str, size_t &pos)
     {
         if (pos + 4 <= str.length() && str.substr(pos, 4) == "null")
         {
@@ -263,7 +263,7 @@ namespace hh_json
     }
 
     // Parse a JSON array
-    std::shared_ptr<JSON_ARRAY> parse_array(const std::string &str, size_t &pos)
+    std::shared_ptr<JsonArray> parse_array(const std::string &str, size_t &pos)
     {
         if (str[pos] != '[')
         {
@@ -273,7 +273,7 @@ namespace hh_json
         ++pos; // Skip '['
         skip_whitespace(str, pos);
 
-        auto array = std::make_shared<JSON_ARRAY>();
+        auto array = std::make_shared<JsonArray>();
 
         // Check for empty array
         if (pos < str.length() && str[pos] == ']')
@@ -312,7 +312,7 @@ namespace hh_json
     }
 
     // Parse a JSON object
-    std::shared_ptr<JSON_OBJECT> parse_object(const std::string &str, size_t &pos)
+    std::shared_ptr<JsonObject> parse_object(const std::string &str, size_t &pos)
     {
         if (str[pos] != '{')
         {
@@ -322,13 +322,13 @@ namespace hh_json
         ++pos; // Skip '{'
         skip_whitespace(str, pos);
 
-        std::unordered_map<std::string, std::shared_ptr<JSON_OBJECT>> properties;
+        std::unordered_map<std::string, std::shared_ptr<JsonObject>> properties;
 
         // Check for empty object
         if (pos < str.length() && str[pos] == '}')
         {
             ++pos; // Skip '}'
-            auto result = std::make_shared<JSON_OBJECT>();
+            auto result = std::make_shared<JsonObject>();
             for (const auto &[key, value] : properties)
             {
                 result->insert(key, value);
@@ -370,7 +370,7 @@ namespace hh_json
             if (pos < str.length() && str[pos] == '}')
             {
                 ++pos; // Skip '}'
-                auto result = std::make_shared<JSON_OBJECT>();
+                auto result = std::make_shared<JsonObject>();
                 for (const auto &[key, value] : properties)
                 {
                     result->insert(key, value);
@@ -393,7 +393,7 @@ namespace hh_json
     }
 
     // Parse a JSON value (can be object, array, string, number, boolean, or null)
-    std::shared_ptr<JSON_OBJECT> parse_value(const std::string &str, size_t &pos)
+    std::shared_ptr<JsonObject> parse_value(const std::string &str, size_t &pos)
     {
         skip_whitespace(str, pos);
 
@@ -432,24 +432,39 @@ namespace hh_json
         throw std::runtime_error("Unexpected character at position " + std::to_string(pos) + ": " + c);
     }
 
-    std::unordered_map<std::string, std::shared_ptr<JSON_OBJECT>>
-    parse(const std::string &jsonString)
+    std::shared_ptr<JsonObject> parse(const std::string &jsonString)
     {
-        auto json_string_copy = jsonString;
+        auto JsonString_copy = jsonString;
 
-        trim(json_string_copy);
-        remove_spaces_not_in_string_literals(json_string_copy);
-        erase_comments(json_string_copy);
+        trim(JsonString_copy);
+        remove_spaces_not_in_string_literals(JsonString_copy);
+        erase_comments(JsonString_copy);
 
         size_t pos = 0;
-        skip_whitespace(json_string_copy, pos);
+        skip_whitespace(JsonString_copy, pos);
 
-        if (pos >= json_string_copy.length() || json_string_copy[pos] != '{')
+        if (pos >= JsonString_copy.length() || JsonString_copy[pos] != '{')
         {
             throw std::runtime_error("JSON must start with an object");
         }
 
-        auto root_obj = parse_object(json_string_copy, pos);
-        return root_obj->get_data();
+        auto root_obj = parse_object(JsonString_copy, pos);
+        return root_obj;
     }
+
+    std::shared_ptr<JsonObject> JsonValue(const std::string &valueString)
+    {
+        size_t pos = 0;
+        if (valueString.empty())
+        {
+            return std::make_shared<JsonObject>();
+        }
+        if (valueString[0] == '{')
+        {
+            return parse(valueString);
+        }
+
+        return parse_value(valueString, pos);
+    }
+
 }

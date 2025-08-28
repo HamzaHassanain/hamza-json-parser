@@ -1,14 +1,14 @@
 #include <iostream>
 
-#include "../includes/JSON_OBJECT.hpp"
+#include "../includes/JsonObject.hpp"
 #include "../includes/parser.hpp"
 namespace hh_json
 {
 
-    JSON_OBJECT::JSON_OBJECT() = default;
-    JSON_OBJECT::~JSON_OBJECT() = default;
+    JsonObject::JsonObject() = default;
+    JsonObject::~JsonObject() = default;
 
-    bool JSON_OBJECT::set_json_data(const std::string &jsonString)
+    bool JsonObject::set_json_data(const std::string &jsonString)
     {
         try
         {
@@ -24,7 +24,7 @@ namespace hh_json
         }
     }
 
-    std::string JSON_OBJECT::stringify() const
+    std::string JsonObject::stringify() const
     {
         std::string result = "{";
 
@@ -41,17 +41,17 @@ namespace hh_json
         return result;
     }
 
-    void JSON_OBJECT::insert(const std::string &key, std::shared_ptr<JSON_OBJECT> value)
+    void JsonObject::insert(const std::string &key, std::shared_ptr<JsonObject> value)
     {
         data.insert({key, value});
     }
 
-    void JSON_OBJECT::erase(const std::string &key)
+    void JsonObject::erase(const std::string &key)
     {
         data.erase(key);
     }
 
-    std::shared_ptr<JSON_OBJECT> JSON_OBJECT::get(const std::string &key) const
+    std::shared_ptr<JsonObject> JsonObject::get(const std::string &key) const
     {
         auto it = data.find(key);
         if (it != data.end())
@@ -61,9 +61,18 @@ namespace hh_json
         return nullptr; // Return a nullptr if key not found
     }
 
-    void JSON_OBJECT::clear()
+    void JsonObject::clear()
     {
         data.clear();
+    }
+
+    std::shared_ptr<JsonObject> &JsonObject::operator[](const std::string &key)
+    {
+        if (data.find(key) == data.end())
+        {
+            data[key] = std::make_shared<JsonObject>();
+        }
+        return data[key];
     }
 
 }

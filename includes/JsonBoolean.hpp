@@ -1,24 +1,24 @@
 #pragma once
 
-#include "JSON_OBJECT.hpp"
+#include "JsonObject.hpp"
 
 #include <stdexcept>
 #include <algorithm>
 
 namespace hh_json
 {
-    class JSON_BOOLEAN : public JSON_OBJECT
+    class JsonBoolean : public JsonObject
     {
 
     public:
         bool value;
-        JSON_BOOLEAN() = default;
+        JsonBoolean() = default;
 
-        JSON_BOOLEAN(bool value) : value(value) {}
-        ~JSON_BOOLEAN() = default;
-        virtual std::shared_ptr<JSON_OBJECT> get([[maybe_unused]] const std::string &key) const
+        JsonBoolean(bool value) : value(value) {}
+        ~JsonBoolean() = default;
+        virtual std::shared_ptr<JsonObject> get([[maybe_unused]] const std::string &key) const
         {
-            throw std::runtime_error("JSON_BOOLEAN does not contain objects");
+            throw std::runtime_error("JsonBoolean does not contain objects");
         }
         bool set_json_data(const std::string &temp) override
         {

@@ -3,19 +3,19 @@
 #include <vector>
 #include <stdexcept>
 #include <memory>
-#include "JSON_OBJECT.hpp"
+#include "JsonObject.hpp"
 namespace hh_json
 {
-    class JSON_ARRAY : public JSON_OBJECT
+    class JsonArray : public JsonObject
     {
 
     public:
-        std::vector<std::shared_ptr<JSON_OBJECT>> elements;
-        JSON_ARRAY() = default;
-        JSON_ARRAY(const std::vector<std::shared_ptr<JSON_OBJECT>> &elements) : elements(elements) {}
-        ~JSON_ARRAY() = default;
+        std::vector<std::shared_ptr<JsonObject>> elements;
+        JsonArray() = default;
+        JsonArray(const std::vector<std::shared_ptr<JsonObject>> &elements) : elements(elements) {}
+        ~JsonArray() = default;
 
-        virtual std::shared_ptr<JSON_OBJECT> get([[maybe_unused]] const std::string &key) const
+        virtual std::shared_ptr<JsonObject> get([[maybe_unused]] const std::string &key) const
         {
             int idx = std::stoi(key);
 
@@ -30,7 +30,7 @@ namespace hh_json
         {
             throw std::runtime_error("Parsing JSON arrays is not implemented.");
         }
-        void insert(std::shared_ptr<JSON_OBJECT> value)
+        void insert(std::shared_ptr<JsonObject> value)
         {
             elements.push_back(value);
         }

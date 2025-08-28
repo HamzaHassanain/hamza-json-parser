@@ -104,83 +104,83 @@ Below is a short reference for the main public headers in this project. Each ent
 
 For more details, please refer to the individual header files.
 
-#### hh_json::JSON_OBJECT
+#### hh_json::JsonObject
 
 ```cpp
-#include "JSON_OBJECT.hpp"
+#include "JsonObject.hpp"
 
-// - Purpose: The base type for all JSON value types. Represents a JSON object (map of key -> JSON_OBJECT).
+// - Purpose: The base type for all JSON value types. Represents a JSON object (map of key -> JsonObject).
 // - Features: Storage for named properties, stringify to JSON text, basic manipulation API.
-// - Inheritance: Base class for concrete JSON types (JSON_STRING, JSON_NUMBER, JSON_BOOLEAN, JSON_ARRAY).
+// - Inheritance: Base class for concrete JSON types (JsonString, JsonNumber, JsonBoolean, JsonArray).
 // - Key methods:
-  JSON_OBJECT();                                           // — Constructor
-  virtual ~JSON_OBJECT();                                  // — Virtual destructor
+  JsonObject();                                           // — Constructor
+  virtual ~JsonObject();                                  // — Virtual destructor
   virtual bool set_json_data(const std::string &jsonString); // — Populate this object by parsing a JSON string
-  virtual void insert(const std::string &key, std::shared_ptr<JSON_OBJECT> value); // — Insert/replace a property
+  virtual void insert(const std::string &key, std::shared_ptr<JsonObject> value); // — Insert/replace a property
   virtual void erase(const std::string &key);             // — Remove a property
-  virtual std::shared_ptr<JSON_OBJECT> get(const std::string &key) const; // — Retrieve a property or nullptr
+  virtual std::shared_ptr<JsonObject> get(const std::string &key) const; // — Retrieve a property or nullptr
   virtual std::string stringify() const;                  // — Serialize to JSON text
   virtual void clear();                                   // — Remove all properties
-  std::shared_ptr<JSON_OBJECT> operator[](const std::string &key); // — Convenience accessor
+  std::shared_ptr<JsonObject> operator[](const std::string &key); // — Convenience accessor
 ```
 
-#### hh_json::JSON_STRING
+#### hh_json::JsonString
 
 ```cpp
-#include "JSON_STRING.hpp"
+#include "JsonString.hpp"
 
 // - Purpose: Represents a JSON string value.
 // - Features: Stores the string content and serializes with surrounding quotes and necessary escapes.
-// - Inheritance: public hh_json::JSON_OBJECT
+// - Inheritance: public hh_json::JsonObject
 // - Key methods:
-  JSON_STRING();
-  JSON_STRING(const std::string &value);                  // — Construct from std::string
+  JsonString();
+  JsonString(const std::string &value);                  // — Construct from std::string
   bool set_json_data(const std::string &jsonString) override; // — Set string value (used by parser)
   std::string stringify() const override;                 // — Returns quoted/escaped string
 ```
 
-#### hh_json::JSON_NUMBER
+#### hh_json::JsonNumber
 
 ```cpp
-#include "JSON_NUMBER.hpp"
+#include "JsonNumber.hpp"
 
 // - Purpose: Represents a numeric JSON value (stored as double).
 // - Features: Parses numeric text to double and formats numbers with std::to_string on stringify.
-// - Inheritance: public hh_json::JSON_OBJECT
+// - Inheritance: public hh_json::JsonObject
 // - Key methods:
-  JSON_NUMBER();
-  JSON_NUMBER(double value);                              // — Construct from a numeric value
+  JsonNumber();
+  JsonNumber(double value);                              // — Construct from a numeric value
   bool set_json_data(const std::string &jsonString) override; // — Parse numeric literal
   std::string stringify() const override;                 // — Serialize number
 ```
 
-#### hh_json::JSON_BOOLEAN
+#### hh_json::JsonBoolean
 
 ```cpp
-#include "JSON_BOOLEAN.hpp"
+#include "JsonBoolean.hpp"
 
 // - Purpose: Represents a boolean JSON value.
 // - Features: Case-insensitive parsing from text "true"/"false" and simple stringify.
-// - Inheritance: public hh_json::JSON_OBJECT
+// - Inheritance: public hh_json::JsonObject
 // - Key methods:
-  JSON_BOOLEAN();
-  JSON_BOOLEAN(bool value);                               // — Construct from bool
+  JsonBoolean();
+  JsonBoolean(bool value);                               // — Construct from bool
   bool set_json_data(const std::string &jsonString) override; // — Parse "true"/"false"
   std::string stringify() const override;                 // — Returns "true" or "false"
 ```
 
-#### hh_json::JSON_ARRAY
+#### hh_json::JsonArray
 
 ```cpp
-#include "JSON_ARRAY.hpp"
+#include "JsonArray.hpp"
 
-// - Purpose: Represents a JSON array (ordered list of JSON_OBJECT pointers).
+// - Purpose: Represents a JSON array (ordered list of JsonObject pointers).
 // - Features: Holds elements, supports insertion and stringify for arrays.
-// - Inheritance: public hh_json::JSON_OBJECT
+// - Inheritance: public hh_json::JsonObject
 // - Key methods:
-  JSON_ARRAY();
-  JSON_ARRAY(const std::vector<std::shared_ptr<JSON_OBJECT>> &elements); // — Construct from a vector
-  void insert(std::shared_ptr<JSON_OBJECT> value);         // — Append element to array
+  JsonArray();
+  JsonArray(const std::vector<std::shared_ptr<JsonObject>> &elements); // — Construct from a vector
+  void insert(std::shared_ptr<JsonObject> value);         // — Append element to array
   bool set_json_data(const std::string &jsonString) override; // — (Not implemented) parse array string
   std::string stringify() const override;                 // — Serialize array
 ```
@@ -193,7 +193,7 @@ For more details, please refer to the individual header files.
 // - Purpose: Parse a JSON text into the library's object representation.
 // - Features: Returns an unordered_map representing the top-level object properties.
 // - Key function:
-  std::unordered_map<std::string, std::shared_ptr<JSON_OBJECT>> parse(const std::string &jsonString);
+  std::unordered_map<std::string, std::shared_ptr<JsonObject>> parse(const std::string &jsonString);
 // - Notes: The parser supports objects, arrays, strings, numbers, booleans and null. It performs a single-pass style parse and returns an in-memory representation using the hh_json types.
 ```
 
@@ -206,15 +206,15 @@ For more details, please refer to the individual header files.
 // - Features: Factory helpers (make_string/make_number/make_boolean) and getters that extract primitive values with runtime type checks.
 // - Namespaces and key functions:
   namespace hh_json::maker
-    std::shared_ptr<hh_json::JSON_OBJECT> make_string(const std::string &value);
-    std::shared_ptr<hh_json::JSON_OBJECT> make_number(double value);
-    std::shared_ptr<hh_json::JSON_OBJECT> make_boolean(bool value);
+    std::shared_ptr<hh_json::JsonObject> make_string(const std::string &value);
+    std::shared_ptr<hh_json::JsonObject> make_number(double value);
+    std::shared_ptr<hh_json::JsonObject> make_boolean(bool value);
 
   namespace hh_json::getter
-    bool get_boolean(const std::shared_ptr<hh_json::JSON_OBJECT> &obj);
-    double get_number(const std::shared_ptr<hh_json::JSON_OBJECT> &obj);
-    std::string get_string(const std::shared_ptr<hh_json::JSON_OBJECT> &obj);
-    std::vector<std::shared_ptr<hh_json::JSON_OBJECT>> get_array(const std::shared_ptr<hh_json::JSON_OBJECT> &obj);
+    bool get_boolean(const std::shared_ptr<hh_json::JsonObject> &obj);
+    double get_number(const std::shared_ptr<hh_json::JsonObject> &obj);
+    std::string get_string(const std::shared_ptr<hh_json::JsonObject> &obj);
+    std::vector<std::shared_ptr<hh_json::JsonObject>> get_array(const std::shared_ptr<hh_json::JsonObject> &obj);
 
-// - Notes: Getters perform dynamic casts and throw on type mismatch. Factories return JSON_OBJECT pointers to the concrete typed instances.
+// - Notes: Getters perform dynamic casts and throw on type mismatch. Factories return JsonObject pointers to the concrete typed instances.
 ```
