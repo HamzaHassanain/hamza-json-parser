@@ -430,7 +430,7 @@ namespace hh_json
         }
         try
         {
-            auto res = parse_string(str, pos);
+            auto res = std::make_shared<JsonString>(str.substr(pos));
             return res;
         }
         catch (...)
@@ -463,13 +463,22 @@ namespace hh_json
 
     std::shared_ptr<JsonObject> JsonValue(const std::string &valueString)
     {
-        size_t pos = 0;
-        if (valueString.empty())
+        try
         {
-            return std::make_shared<JsonObject>();
-        }
 
-        return parse_value(valueString, pos);
+            size_t pos = 0;
+            if (valueString.empty())
+            {
+                return std::make_shared<JsonObject>();
+            }
+
+            return parse_value(valueString, pos);
+        }
+        catch (const std::exception &e)
+        {
+            std::cerr << "[ERROR] Failed to parse JSON value: " << e.what() << std::endl;
+            return nullptr;
+        }
     }
 
 }
