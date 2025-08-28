@@ -428,8 +428,16 @@ namespace hh_json
         {
             return parse_null(str, pos);
         }
+        try
+        {
+            auto res = parse_string(str, pos);
+            return res;
+        }
+        catch (...)
+        {
 
-        throw std::runtime_error("Unexpected character at position " + std::to_string(pos) + ": " + c);
+            throw std::runtime_error("Unexpected character at position " + std::to_string(pos) + ": " + c);
+        }
     }
 
     std::unordered_map<std::string, std::shared_ptr<JsonObject>>
