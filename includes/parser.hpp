@@ -12,5 +12,6 @@ namespace hh_json
     std::shared_ptr<JsonObject> JsonValue(const std::string &valueString);
 
     // Main parsing function to parse a JSON string into a map of JSON objects
-    std::shared_ptr<JsonObject> parse(const std::string &jsonString);
+    std::unordered_map<std::string, std::shared_ptr<JsonObject>>
+    parse(const std::string &jsonString);
 }
