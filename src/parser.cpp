@@ -428,16 +428,8 @@ namespace hh_json
         {
             return parse_null(str, pos);
         }
-        try
-        {
-            auto res = std::make_shared<JsonString>(str.substr(pos));
-            return res;
-        }
-        catch (...)
-        {
 
-            throw std::runtime_error("Unexpected character at position " + std::to_string(pos) + ": " + c);
-        }
+        throw std::runtime_error("Unexpected character at position " + std::to_string(pos) + ": " + c);
     }
 
     std::unordered_map<std::string, std::shared_ptr<JsonObject>>
@@ -476,7 +468,7 @@ namespace hh_json
         }
         catch (const std::exception &e)
         {
-            std::cerr << "[ERROR] Failed to parse JSON value: " << e.what() << std::endl;
+            std::cerr << e.what() << std::endl;
             return nullptr;
         }
     }

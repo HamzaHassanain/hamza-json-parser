@@ -35,3 +35,11 @@ if [ "$1" = "run" ]; then
     echo "Running the application..."
     ./build/json_parser
 fi
+
+
+if [ "$1" = "test" ]; then
+    echo "Running tests..."
+    cd build
+    ctest --output-on-failure
+    cd ..
+fi

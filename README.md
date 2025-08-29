@@ -98,6 +98,34 @@ Then in your cpp file, include the http library header:
 #include "submodules/json-parser/json-parser.hpp"
 ```
 
+## Running Tests
+
+This project includes Google Test for unit testing. To build and run the tests:
+
+```bash
+# Navigate to the tests directory
+cd tests
+
+# Configure the build
+cmake -B build -S .
+
+# Build the tests
+cmake --build build
+
+# Run the tests
+./build/json_parser_tests
+
+# Or use CTest to run tests
+cd build && ctest --output-on-failure
+```
+
+The test suite includes comprehensive tests for:
+
+- JSON object creation and manipulation
+- JSON parsing functionality
+- Helper functions (makers and getters)
+- Error handling for invalid JSON
+
 ## API Documentation
 
 Below is a short reference for the main public headers in this project. Each entry contains purpose, features, inheritance and the most important public API (signatures) so you can quickly discover how to use the library.
@@ -114,6 +142,7 @@ For more details, please refer to the individual header files.
 // - Inheritance: Base class for concrete JSON types (JsonString, JsonNumber, JsonBoolean, JsonArray).
 // - Key methods:
   JsonObject();                                           // — Constructor
+  JsonObject(const std::unordered_map<std::string, std::shared_ptr<JsonObject>> &initial_data); // — Constructor with initial data
   virtual ~JsonObject();                                  // — Virtual destructor
   virtual bool set_json_data(const std::string &jsonString); // — Populate this object by parsing a JSON string
   virtual void insert(const std::string &key, std::shared_ptr<JsonObject> value); // — Insert/replace a property
@@ -121,7 +150,9 @@ For more details, please refer to the individual header files.
   virtual std::shared_ptr<JsonObject> get(const std::string &key) const; // — Retrieve a property or nullptr
   virtual std::string stringify() const;                  // — Serialize to JSON text
   virtual void clear();                                   // — Remove all properties
-  std::shared_ptr<JsonObject> operator[](const std::string &key); // — Convenience accessor
+  const std::unordered_map<std::string, std::shared_ptr<JsonObject>> &get_data() const; // — Get underlying data
+  std::shared_ptr<JsonObject> &operator[](const std::string &key); // — Convenience accessor
+  bool has_key(const std::string &key) const;            // — Check if key exists
 ```
 
 #### hh_json::JsonString
@@ -191,16 +222,17 @@ For more details, please refer to the individual header files.
 #include "parser.hpp"
 
 // - Purpose: Parse a JSON text into the library's object representation.
-// - Features: Returns an unordered_map representing the top-level object properties.
-// - Key function:
-  std::unordered_map<std::string, std::shared_ptr<JsonObject>> parse(const std::string &jsonString);
+// - Features: Returns an unordered_map representing the top-level object properties, plus a utility function for parsing single values.
+// - Key functions:
+  std::shared_ptr<JsonObject> JsonValue(const std::string &valueString); // — Parse a single JSON value
+  std::unordered_map<std::string, std::shared_ptr<JsonObject>> parse(const std::string &jsonString); // — Parse full JSON object
 // - Notes: The parser supports objects, arrays, strings, numbers, booleans and null. It performs a single-pass style parse and returns an in-memory representation using the hh_json types.
 ```
 
-#### healpers.hpp (factory & getters)
+#### helpers.hpp (factory & getters)
 
 ```cpp
-#include "healpers.hpp"
+#include "helpers.hpp"
 
 // - Purpose: Small convenience factory and getter helpers for creating and extracting typed JSON objects.
 // - Features: Factory helpers (make_string/make_number/make_boolean) and getters that extract primitive values with runtime type checks.
