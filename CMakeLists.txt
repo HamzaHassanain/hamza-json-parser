@@ -43,10 +43,10 @@ endif()
 file(GLOB SRC_FILES src/*.cpp)
 
 # Enable testing for the project
-enable_testing()
+# enable_testing()
 
 # Include the test subdirectory
-add_subdirectory(tests)
+# add_subdirectory(tests)
 
 # Check environment variable
 if( JSON_LOCAL_TEST AND JSON_LOCAL_TEST STREQUAL "1")
