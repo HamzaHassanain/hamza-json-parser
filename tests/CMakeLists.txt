@@ -9,24 +9,33 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
-# Create a test executable
-add_executable(json_parser_tests test.cpp)
+# Get source files for the library (excluding main app)
+file(GLOB PARSER_SRC_FILES ${CMAKE_SOURCE_DIR}/src/*.cpp)
 
-# # Include directories for headers
-# target_include_directories(json_parser_tests PRIVATE 
-#     ${CMAKE_SOURCE_DIR}/includes
-#     ${CMAKE_SOURCE_DIR}
-# )
+# Create a test executable with the source files directly
+add_executable(json_parser_tests test.cpp ${PARSER_SRC_FILES})
+
+# Include directories for headers
+target_include_directories(json_parser_tests PRIVATE 
+    ${CMAKE_SOURCE_DIR}/includes
+    ${CMAKE_SOURCE_DIR}
+)
 
 # Set C++17 standard for tests
 target_compile_features(json_parser_tests PRIVATE cxx_std_17)
 
-# Link your test executable to the GTest libraries and the json_parser library
+# Windows-specific fix for multiply defined symbols with inline functions
+if(WIN32 AND MSVC)
+    target_link_options(json_parser_tests PRIVATE "/FORCE:MULTIPLE")
+endif()
+
+# Link your test executable to the GTest libraries only
+
+# Note: We include source files directly to avoid linking issues with inline functions on Windows
 target_link_libraries(json_parser_tests
   PRIVATE
     GTest::gtest_main
     GTest::gtest
-    json_parser  # Link to the library we're testing
 )
 
 # Tell CMake to find and register the tests to be run with CTest
