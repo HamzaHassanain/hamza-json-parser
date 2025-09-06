@@ -103,131 +103,8 @@ TEST_F(JsonBooleanTest, StringifyConsistency)
     EXPECT_EQ(json_bool_false->stringify(), "false");
 }
 
-// Test JsonString functionality
-TEST(JsonStringTest, BasicFunctionality)
-{
-    auto json_str = std::make_shared<JsonString>("Hello World");
-    EXPECT_EQ(json_str->stringify(), "\"Hello World\"");
-}
-
-TEST(JsonStringTest, SetJsonData)
-{
-    auto json_str = std::make_shared<JsonString>();
-    EXPECT_TRUE(json_str->set_json_data("Test String"));
-    EXPECT_EQ(json_str->value, "Test String");
-    EXPECT_EQ(json_str->stringify(), "\"Test String\"");
-}
-
-// Test JsonNumber functionality
-TEST(JsonNumberTest, ConstructorWithInteger)
-{
-    auto json_num = std::make_shared<JsonNumber>(42);
-    EXPECT_DOUBLE_EQ(json_num->value, 42.0);
-}
-
-TEST(JsonNumberTest, ConstructorWithDouble)
-{
-    auto json_num = std::make_shared<JsonNumber>(3.14159);
-    EXPECT_DOUBLE_EQ(json_num->value, 3.14159);
-}
-
-TEST(JsonNumberTest, SetJsonDataWithValidNumber)
-{
-    auto json_num = std::make_shared<JsonNumber>();
-    EXPECT_TRUE(json_num->set_json_data("123.456"));
-    EXPECT_DOUBLE_EQ(json_num->value, 123.456);
-}
-
-// Test JsonObject functionality
-TEST(JsonObjectTest, InsertAndRetrieve)
-{
-    auto obj = std::make_shared<JsonObject>();
-    auto str_val = std::make_shared<JsonString>("test_value");
-
-    obj->insert("test_key", str_val);
-    auto retrieved = obj->get("test_key");
-
-    ASSERT_NE(retrieved, nullptr);
-    auto retrieved_str = std::dynamic_pointer_cast<JsonString>(retrieved);
-    ASSERT_NE(retrieved_str, nullptr);
-    EXPECT_EQ(retrieved_str->value, "test_value");
-}
-
-TEST(JsonObjectTest, HasKey)
-{
-    auto obj = std::make_shared<JsonObject>();
-    auto bool_val = std::make_shared<JsonBoolean>(true);
-
-    EXPECT_FALSE(obj->has_key("test_key"));
-    obj->insert("test_key", bool_val);
-    EXPECT_TRUE(obj->has_key("test_key"));
-}
-
-TEST(JsonObjectTest, EraseKey)
-{
-    auto obj = std::make_shared<JsonObject>();
-    auto num_val = std::make_shared<JsonNumber>(42.0);
-
-    obj->insert("test_key", num_val);
-    EXPECT_TRUE(obj->has_key("test_key"));
-
-    obj->erase("test_key");
-    EXPECT_FALSE(obj->has_key("test_key"));
-    EXPECT_EQ(obj->get("test_key"), nullptr);
-}
-
-// Test JsonArray functionality
-TEST(JsonArrayTest, InsertAndStringify)
-{
-    auto arr = std::make_shared<JsonArray>();
-    arr->insert(std::make_shared<JsonString>("first"));
-    arr->insert(std::make_shared<JsonNumber>(42));
-    arr->insert(std::make_shared<JsonBoolean>(true));
-
-    EXPECT_EQ(arr->elements.size(), 3);
-
-    std::string result = arr->stringify();
-    EXPECT_NE(result.find("\"first\""), std::string::npos);
-    EXPECT_NE(result.find("42"), std::string::npos);
-    EXPECT_NE(result.find("true"), std::string::npos);
-}
-
-// Test Helper functions (if available)
-TEST(HelpersTest, MakeBoolean)
-{
-    try
-    {
-        auto bool_obj = maker::make_boolean(true);
-        ASSERT_NE(bool_obj, nullptr);
-
-        auto bool_cast = std::dynamic_pointer_cast<JsonBoolean>(bool_obj);
-        ASSERT_NE(bool_cast, nullptr);
-        EXPECT_EQ(bool_cast->value, true);
-    }
-    catch (...)
-    {
-        // Helper functions might not be available, skip this test
-        GTEST_SKIP() << "Helper functions not available";
-    }
-}
-
-TEST(HelpersTest, GetBoolean)
-{
-    try
-    {
-        auto bool_obj = std::make_shared<JsonBoolean>(false);
-        bool value = getter::get_boolean(bool_obj);
-        EXPECT_EQ(value, false);
-    }
-    catch (...)
-    {
-        // Helper functions might not be available, skip this test
-        GTEST_SKIP() << "Helper functions not available";
-    }
-}
-
 // Integration test - Test JsonBoolean within JsonObject
-TEST(IntegrationTest, JsonBooleanInObject)
+TEST_F(JsonBooleanTest, JsonBooleanInObject)
 {
     auto obj = std::make_shared<JsonObject>();
     auto bool_true = std::make_shared<JsonBoolean>(true);
@@ -253,7 +130,7 @@ TEST(IntegrationTest, JsonBooleanInObject)
 }
 
 // Test JsonBoolean within JsonArray
-TEST(IntegrationTest, JsonBooleanInArray)
+TEST_F(JsonBooleanTest, JsonBooleanInArray)
 {
     auto arr = std::make_shared<JsonArray>();
     arr->insert(std::make_shared<JsonBoolean>(true));
@@ -278,4 +155,37 @@ TEST(IntegrationTest, JsonBooleanInArray)
     // Test stringify
     std::string arr_str = arr->stringify();
     EXPECT_EQ(arr_str, "[true,false,true]");
+}
+
+// Test edge cases
+TEST_F(JsonBooleanTest, EdgeCases)
+{
+    auto json_bool = std::make_shared<JsonBoolean>();
+
+    // Test with whitespace
+    EXPECT_FALSE(json_bool->set_json_data(" true ")); // Should not accept whitespace
+    EXPECT_FALSE(json_bool->set_json_data("true "));
+    EXPECT_FALSE(json_bool->set_json_data(" true"));
+
+    // Test partial matches
+    EXPECT_FALSE(json_bool->set_json_data("tr"));
+    EXPECT_FALSE(json_bool->set_json_data("truee"));
+    EXPECT_FALSE(json_bool->set_json_data("fals"));
+    EXPECT_FALSE(json_bool->set_json_data("falsee"));
+}
+
+// Test copy behavior
+TEST_F(JsonBooleanTest, CopyBehavior)
+{
+    auto original = std::make_shared<JsonBoolean>(true);
+    auto copy = std::make_shared<JsonBoolean>(original->value);
+
+    EXPECT_EQ(original->value, copy->value);
+    EXPECT_EQ(original->stringify(), copy->stringify());
+
+    // Modify copy, original should remain unchanged
+    copy->value = false;
+    EXPECT_NE(original->value, copy->value);
+    EXPECT_TRUE(original->value);
+    EXPECT_FALSE(copy->value);
 }

@@ -19,8 +19,11 @@ FetchContent_MakeAvailable(googletest)
 # Get source files for the library (excluding main app)
 file(GLOB PARSER_SRC_FILES ${CMAKE_SOURCE_DIR}/src/*.cpp)
 
+# Get all test files
+file(GLOB TEST_FILES *_test.cpp)
+
 # Create a test executable with the source files directly
-add_executable(json_parser_tests test.cpp ${PARSER_SRC_FILES})
+add_executable(json_parser_tests ${TEST_FILES} ${PARSER_SRC_FILES})
 
 # Include directories for headers
 target_include_directories(json_parser_tests PRIVATE 

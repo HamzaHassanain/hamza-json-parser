@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <memory>
 #include "JsonObject.hpp"
+#include "parser.hpp"
 namespace hh_json
 {
     class JsonArray : public JsonObject
@@ -17,18 +18,42 @@ namespace hh_json
 
         virtual std::shared_ptr<JsonObject> get([[maybe_unused]] const std::string &key) const
         {
-            int idx = std::stoi(key);
-
-            if (idx < 0 || idx >= static_cast<int>(elements.size()))
+            try
             {
-                throw std::out_of_range("Invalid array index");
+                int idx = std::stoi(key);
+
+                if (idx < 0 || idx >= static_cast<int>(elements.size()))
+                {
+                    throw std::out_of_range("Invalid array index");
+                }
+                return elements[idx];
             }
-            return elements[idx];
+            catch (const std::invalid_argument &)
+            {
+                throw std::runtime_error("JsonArray does not support key-based access with non-numeric keys");
+            }
+            catch (const std::out_of_range &)
+            {
+                throw std::runtime_error("JsonArray index out of range");
+            }
         }
 
         bool set_json_data([[maybe_unused]] const std::string &jsonString) override
         {
-            throw std::runtime_error("Parsing JSON arrays is not implemented.");
+            auto obj = hh_json::JsonValue(jsonString);
+            if (!obj)
+            {
+                return false;
+            }
+            if (auto arr = std::dynamic_pointer_cast<JsonArray>(obj))
+            {
+                elements = arr->elements;
+            }
+            else
+            {
+                return false;
+            }
+            return true;
         }
         void insert(std::shared_ptr<JsonObject> value)
         {
@@ -41,7 +66,7 @@ namespace hh_json
             {
                 result += element->stringify() + ",";
             }
-            if (!elements.empty())
+            if (result.back() == ',')
             {
                 result.pop_back(); // Remove trailing comma
             }

@@ -21,7 +21,8 @@ namespace hh_json
         catch (const std::exception &e)
         {
             std::cerr << "Error parsing JSON data: " << e.what() << std::endl;
-            return false;
+            // Re-throw as runtime_error for tests that expect exceptions
+            throw std::runtime_error("Failed to parse JSON data: " + std::string(e.what()));
         }
     }
 
@@ -49,7 +50,7 @@ namespace hh_json
 
     void JsonObject::insert(const std::string &key, std::shared_ptr<JsonObject> value)
     {
-        data.insert({key, value});
+        data[key] = value; // This will overwrite existing keys
     }
 
     void JsonObject::erase(const std::string &key)
