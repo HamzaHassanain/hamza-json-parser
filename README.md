@@ -1,6 +1,6 @@
 # Simple JSON Parser
 
-A simple JSON parser written in C++.
+A simple JSON parser written in CPP.
 
 ### Check app.cpp for example usage
 
