@@ -2,6 +2,13 @@ cmake_minimum_required(VERSION 3.10)
 
 # Use FetchContent to download and add GoogleTest
 include(FetchContent)
+
+# Configure GoogleTest to use the same runtime library as our project
+if(WIN32 AND MSVC)
+    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
+endif()
+
 FetchContent_Declare(
   googletest
   GIT_REPOSITORY https://github.com/google/googletest.git
@@ -24,13 +31,13 @@ target_include_directories(json_parser_tests PRIVATE
 # Set C++17 standard for tests
 target_compile_features(json_parser_tests PRIVATE cxx_std_17)
 
-# Windows-specific fix for multiply defined symbols with inline functions
+# Windows-specific runtime library configuration
 if(WIN32 AND MSVC)
-    target_link_options(json_parser_tests PRIVATE "/FORCE:MULTIPLE")
+    set_property(TARGET json_parser_tests PROPERTY
+        MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
 endif()
 
 # Link your test executable to the GTest libraries only
-
 # Note: We include source files directly to avoid linking issues with inline functions on Windows
 target_link_libraries(json_parser_tests
   PRIVATE
